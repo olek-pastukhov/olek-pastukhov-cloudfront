@@ -10,28 +10,26 @@ import { theme } from "~/theme";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnWindowFocus: false, retry: false, staleTime: Infinity },
-  },
+    queries: { refetchOnWindowFocus: false, retry: false, staleTime: Infinity }
+  }
 });
 
-if (import.meta.env.DEV) {
-  const { worker } = await import("./mocks/browser");
+import("./mocks/browser").then(({ worker }) => {
   worker.start({ onUnhandledRequest: "bypass" });
-}
-
-const container = document.getElementById("app");
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(container!);
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+  const container = document.getElementById("app");
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const root = createRoot(container!);
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+});

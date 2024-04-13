@@ -33,7 +33,7 @@ export default function Header() {
             underline="none"
             to="/"
           >
-            My Store!
+            Welcome to Olek Store
           </Link>
         </Typography>
 
