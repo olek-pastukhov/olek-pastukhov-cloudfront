@@ -4,7 +4,8 @@ frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs14.x  # consider updating to a newer Node.js
+  stage: dev
+  runtime: nodejs14.x
   region: eu-west-1
   profile: epamlearn
 

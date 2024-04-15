@@ -1,4 +1,4 @@
-import { OrderStatus } from "~/constants/order";
+import { OrderStatus } from "../constants/order";
 import { CartItem } from "~/models/CartItem";
 import { Order } from "~/models/Order";
 import { AvailableProduct, Product } from "~/models/Product";
