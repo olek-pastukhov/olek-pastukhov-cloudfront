@@ -1,14 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { API_GATEWAYS, default as API_PATHS } from "~/constants/apiPaths";
-import { Product } from "~/models/Product";
+import { Product, AvailableProduct } from "~/models/Product";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import React from "react";
 
 export function useProducts() {
-  return useQuery<Product[], AxiosError>(
+  return useQuery<AvailableProduct[], AxiosError>(
     "products",
     async () => {
-      const res = await axios.get<Product[]>(
+      const res = await axios.get<AvailableProduct[]>(
         `${API_GATEWAYS.products}/products`
       );
       return res.data;
@@ -24,14 +24,14 @@ export function useInvalidateProducts() {
   );
 }
 
-export function useProduct(id?: string): ReturnType<typeof useQuery<Product, AxiosError>> {
-  return useQuery<Product, AxiosError>(
+export function useProduct(id?: string): ReturnType<typeof useQuery<AvailableProduct, AxiosError>> {
+  return useQuery<AvailableProduct, AxiosError>(
     ["product", { id }],
-    async (): Promise<Product> => {
-      const res = await axios.get<Product>(
+    async (): Promise<AvailableProduct> => {
+      const res = await axios.get<AvailableProduct>(
         `${API_GATEWAYS.products}/products/${id}`
       );
-      return res.data as Product;
+      return res.data as AvailableProduct;
     },
     { enabled: !!id }
   );
