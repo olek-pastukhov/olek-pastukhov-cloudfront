@@ -1,4 +1,4 @@
-import API_PATHS from "~/constants/apiPaths";
+import { API_GATEWAYS } from "~/constants/apiPaths";
 import ProductsTable from "~/components/pages/admin/PageProductImport/components/ProductsTable";
 import CSVFileImport from "~/components/pages/admin/PageProductImport/components/CSVFileImport";
 import Button from "@mui/material/Button";
@@ -10,7 +10,7 @@ export default function PageProductImport() {
     <Box py={3}>
       <Box mb={2} display="flex" justifyContent="space-between">
         <CSVFileImport
-          url={`${API_PATHS.import}/import`}
+          url={`${API_GATEWAYS.imports}/import`}
           title="Import Products CSV"
         />
         <Button
