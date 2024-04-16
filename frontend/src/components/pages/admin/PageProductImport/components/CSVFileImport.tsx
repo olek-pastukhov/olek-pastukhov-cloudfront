@@ -29,19 +29,14 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
       return;
     }
 
-    const response = await axios({
-      method: "GET",
-      url,
+    const response = await axios.get(url, {
       params: {
         fileName: encodeURIComponent(file.name)
       }
     });
     console.log("File to upload: ", file.name);
     console.log("Uploading to: ", response.data);
-    const result = await fetch(response.data, {
-      method: "PUT",
-      body: file
-    });
+    const result = await axios.put(response.data, file, { headers: { "Content-Type": "text/csv" } });
     console.log("Result: ", result);
     setFile(undefined);
   };
