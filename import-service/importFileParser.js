@@ -28,7 +28,7 @@ module.exports.importFileParser = async (event) => {
 
   await s3.copyObject({
     Bucket: Record.s3.bucket.name,
-    CopySource: Record.s3.object.key,
+    CopySource: `${Record.s3.bucket.name}/${Record.s3.object.key}`,
     Key: Record.s3.object.key.replace("uploaded", "parsed")
   }).promise();
 
