@@ -3,6 +3,7 @@ const s3 = new AWS.S3();
 const csv = require("csv-parser");
 
 module.exports.importFileParser = async (event) => {
+  console.log("importFileParser lambda has been invoked with event: ", event);
   const [Record] = event.Records || [];
 
   if (!Record) {

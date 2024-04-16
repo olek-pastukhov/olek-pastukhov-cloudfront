@@ -31,10 +31,7 @@ provider:
       statements:
         - Effect: "Allow"
           Action:
-            - s3:ListBucket
-            - s3:GetObject
-            - s3:PutObject
-            - s3:DeleteObject
+            - s3:*
             - dynamodb:Query
             - dynamodb:Scan
             - dynamodb:GetItem
@@ -46,6 +43,7 @@ provider:
           Resource:
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"
+            - "arn:aws:s3:::olek-import-service-s3/*"
   environment:
     PRODUCTS_DYNAMO_DB: 'olek-products'
     STOCK_DYNAMO_DB: 'olek-stock'
