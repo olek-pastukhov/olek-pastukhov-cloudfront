@@ -36,8 +36,10 @@ provider:
             - dynamodb:Scan
             - dynamodb:GetItem
             - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
+            - dynamodb:Update*
+            - dynamodb:Delete*
+            - dynamodb:CreateTable
+            - dynamodb:DescribeTable
           Resource:
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"
@@ -80,6 +82,14 @@ functions:
           method: get
           cors: true
 
+  createProduct:
+    handler: createProduct.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+
   provisionProductsList:
     handler: provisionProductsList.provisionProductsList
     events:
@@ -94,6 +104,30 @@ functions:
       - http:
           path: products/{productId}
           method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                productId: true
+
+  updateProductById:
+    handler: updateProductById.updateProductById
+    events:
+      - http:
+          path: products/{productId}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                productId: true
+
+  deleteProductById:
+    handler: deleteProductById.deleteProductById
+    events:
+      - http:
+          path: products/{productId}
+          method: delete
           cors: true
           request:
             parameters:

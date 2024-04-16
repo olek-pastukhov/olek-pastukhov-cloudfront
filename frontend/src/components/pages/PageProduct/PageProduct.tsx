@@ -32,6 +32,7 @@ export default function PageProduct() {
             {data.title}
           </Typography>
           <Typography>{formatAsPrice(data.price)}</Typography>
+          <Typography>Available: {data.count} pieces</Typography>
         </CardContent>
         <CardActions>
           <AddProductToCart product={data} />
