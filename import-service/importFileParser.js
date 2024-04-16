@@ -1,9 +1,9 @@
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
-const csv = require('csv-parser');
+const csv = require("csv-parser");
 
 module.exports.importFileParser = async (event) => {
-  const [ Record ] = event.Records || [];
+  const [Record] = event.Records || [];
 
   if (!Record) {
     return;
@@ -14,11 +14,14 @@ module.exports.importFileParser = async (event) => {
     Key: Record.s3.object.key
   }).createReadStream();
 
-  s3Stream.pipe(csv())
-    .on('data', (data) => {
-      console.log(data);
-    })
-    .on('end', () => {
-      console.log('CSV processing completed');
-    });
+  return await new Promise((resolve, reject) => {
+    s3Stream.pipe(csv())
+      .on("data", (data) => {
+        console.log(data);
+      })
+      .on("end", () => {
+        console.log("CSV processing completed");
+        resolve();
+      });
+  });
 };

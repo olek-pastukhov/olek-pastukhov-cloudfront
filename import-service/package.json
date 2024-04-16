@@ -8,13 +8,16 @@
     "serverless:remove": "sls remove"
   },
   "devDependencies": {
+    "aws-sdk": "^2.1599.0",
     "prettier": "2.7.1",
     "serverless": "^3.20.0",
     "serverless-finch": "^4.0.0",
-    "serverless-s3-cleaner": "^2.0.1",
-    "aws-sdk": "^2.1599.0"
+    "serverless-s3-cleaner": "^2.0.1"
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "csv-parser": "^3.0.0"
   }
 }
