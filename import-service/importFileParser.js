@@ -15,7 +15,7 @@ module.exports.importFileParser = async (event) => {
     Key: Record.s3.object.key
   }).createReadStream();
 
-  return await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     s3Stream.pipe(csv())
       .on("data", (data) => {
         console.log(data);
@@ -25,4 +25,15 @@ module.exports.importFileParser = async (event) => {
         resolve();
       });
   });
+
+  await s3.copyObject({
+    Bucket: Record.s3.bucket.name,
+    CopySource: Record.s3.object.key,
+    Key: Record.s3.object.key.replace("uploaded", "parsed")
+  }).promise();
+
+  await s3.deleteObject({
+    Bucket: Record.s3.bucket.name,
+    Key: Record.s3.object.key
+  }).promise();
 };
