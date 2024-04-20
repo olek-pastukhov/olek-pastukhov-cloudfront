@@ -10,7 +10,8 @@ import {
   useProduct,
   useInvalidateProducts,
   useRemoveProductCache,
-  useUpsertAvailableProduct,
+  useUpdateAvailableProduct,
+  useCreateAvailableProduct,
 } from "~/queries/products";
 
 const initialValues: AvailableProduct = AvailableProductSchema.cast({});
@@ -21,7 +22,8 @@ export default function PageProductForm() {
   const invalidateAvailableProducts = useInvalidateProducts();
   const removeProductCache = useRemoveProductCache();
   const { data, isLoading } = useProduct(id);
-  const { mutateAsync: upsertAvailableProduct } = useUpsertAvailableProduct();
+  const { mutateAsync: updateAvailableProduct } = useUpdateAvailableProduct();
+  const { mutateAsync: createAvailableProduct } = useCreateAvailableProduct();
   const onSubmit = (values: AvailableProduct) => {
     const formattedValues = AvailableProductSchema.cast(values);
     const productToSave = id
@@ -30,13 +32,15 @@ export default function PageProductForm() {
           id,
         }
       : formattedValues;
-    return upsertAvailableProduct(productToSave, {
+
+    const params = {
       onSuccess: () => {
         invalidateAvailableProducts();
         removeProductCache(id);
         navigate("/admin/products");
       },
-    });
+    }
+    return id ? updateAvailableProduct(productToSave, params) : createAvailableProduct(productToSave, params);
   };
 
   return (

@@ -20,14 +20,34 @@ service: products-service
 # Check out our docs for more details
 frameworkVersion: "3"
 
+
 provider:
   name: aws
   stage: dev
   runtime: nodejs16.x
   region: eu-west-1
   profile: epamlearn
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:Update*
+            - dynamodb:Delete*
+            - dynamodb:CreateTable
+            - dynamodb:DescribeTable
+          Resource:
+            - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
+            - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"
+  environment:
+    PRODUCTS_DYNAMO_DB: 'olek-products'
+    STOCK_DYNAMO_DB: 'olek-stock'
 
-# you can add statements to the Lambda function's IAM Role here
+  # you can add statements to the Lambda function's IAM Role here
 #  iam:
 #    role:
 #      statements:
@@ -44,10 +64,6 @@ provider:
 #              - - "arn:aws:s3:::"
 #                - "Ref" : "ServerlessDeploymentBucket"
 #                - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
 
 # you can add packaging information here
 #package:
@@ -66,12 +82,52 @@ functions:
           method: get
           cors: true
 
+  createProduct:
+    handler: createProduct.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+
+  provisionProductsList:
+    handler: provisionProductsList.provisionProductsList
+    events:
+      - http:
+          path: products/provision
+          method: get
+          cors: true
+
   getProductsById:
     handler: getProductsById.getProductsById
     events:
       - http:
           path: products/{productId}
           method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                productId: true
+
+  updateProductById:
+    handler: updateProductById.updateProductById
+    events:
+      - http:
+          path: products/{productId}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                productId: true
+
+  deleteProductById:
+    handler: deleteProductById.deleteProductById
+    events:
+      - http:
+          path: products/{productId}
+          method: delete
           cors: true
           request:
             parameters:
