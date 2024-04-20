@@ -15,17 +15,22 @@ provider:
           Action:
             - s3:*
             - dynamodb:*
+            - sqs:*
+            - sns:*
           Resource:
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"
             - "arn:aws:s3:::olek-import-service-s3/*"
+            - "arn:aws:sqs:eu-west-1:*:catalogItemsQueue"
+            - "arn:aws:sns:eu-west-1:*:createProductTopic"
 
   environment:
     PRODUCTS_DYNAMO_DB: 'olek-products'
     STOCK_DYNAMO_DB: 'olek-stock'
     UPLOADS_S3_BUCKET: 'olek-import-service-s3'
     SNS_TOPIC_ARN: !Ref createProductTopic
-    SQS_URL: !GetAtt catalogItemsQueue.Arn
+    SQS_URL: 'https://sqs.eu-west-1.amazonaws.com/471112819617/catalogItemsQueue'
+
 
 resources:
   Resources:

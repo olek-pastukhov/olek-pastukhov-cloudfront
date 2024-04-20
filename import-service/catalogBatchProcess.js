@@ -4,10 +4,15 @@ const sns = new AWS.SNS();
 
 module.exports.catalogBatchProcess = async (event) => {
   for (const record of event.Records) {
-    const product = JSON.parse(record.body);
+    const { count, ...product } = JSON.parse(record.body);
     await documentClient.put({
       TableName: process.env.PRODUCTS_DYNAMO_DB,
       Item: product
+    }).promise();
+
+    await documentClient.put({
+      TableName: process.env.STOCK_DYNAMO_DB,
+      Item: { count, product_id: product.id}
     }).promise();
 
     await sns.publish({
