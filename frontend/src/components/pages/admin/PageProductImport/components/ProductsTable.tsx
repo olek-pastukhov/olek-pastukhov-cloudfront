@@ -9,15 +9,15 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { formatAsPrice } from "~/utils/utils";
 import {
-  useAvailableProducts,
+  useProducts,
   useDeleteAvailableProduct,
-  useInvalidateAvailableProducts,
+  useInvalidateProducts,
 } from "~/queries/products";
 
 export default function ProductsTable() {
-  const { data = [] } = useAvailableProducts();
+  const { data = [] } = useProducts();
   const { mutate: deleteAvailableProduct } = useDeleteAvailableProduct();
-  const invalidateAvailableProducts = useInvalidateAvailableProducts();
+  const invalidateAvailableProducts = useInvalidateProducts();
 
   return (
     <TableContainer component={Paper}>
