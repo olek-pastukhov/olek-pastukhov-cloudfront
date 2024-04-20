@@ -14,14 +14,7 @@ provider:
       statements:
         - Effect: "Allow"
           Action:
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:Update*
-            - dynamodb:Delete*
-            - dynamodb:CreateTable
-            - dynamodb:DescribeTable
+            - dynamodb:*
           Resource:
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"

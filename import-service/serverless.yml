@@ -43,6 +43,19 @@ resources:
       Properties:
         Endpoint: oleksandr_pastukhov@epam.com
         Protocol: email
+        FilterPolicy:
+          vip:
+            - 'false'
+        TopicArn:
+          Ref: createProductTopic
+    adminEmailSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: flashka.ua@gmail.com
+        Protocol: email
+        FilterPolicy:
+          vip:
+            - 'true'
         TopicArn:
           Ref: createProductTopic
     catalogItemsQueue:

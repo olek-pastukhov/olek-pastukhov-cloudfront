@@ -17,6 +17,12 @@ module.exports.catalogBatchProcess = async (event) => {
 
     await sns.publish({
       TopicArn: process.env.SNS_TOPIC_ARN,
+      MessageAttributes: {
+        vip: {
+          DataType: 'String',
+          StringValue: String(product.vip)
+        }
+      },
       Message: `Product created: ${JSON.stringify(product)}`
     }).promise();
   }
