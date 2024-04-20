@@ -9,4 +9,5 @@ const API_PATHS = {
 export default API_PATHS;
 export const API_GATEWAYS = {
   products: "https://it45xre8ed.execute-api.eu-west-1.amazonaws.com/dev",
+  imports: "https://tfw7zd3m10.execute-api.eu-west-1.amazonaws.com/dev",
 }
