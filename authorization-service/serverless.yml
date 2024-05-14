@@ -1,0 +1,20 @@
+service: authorization-service
+
+frameworkVersion: "3"
+
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs16.x
+  region: eu-west-1
+  profile: epamlearn
+  environment:
+    ${file(.env)}
+
+plugins:
+  - serverless-dotenv-plugin
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
