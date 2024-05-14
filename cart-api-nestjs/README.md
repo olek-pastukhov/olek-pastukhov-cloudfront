@@ -23,7 +23,7 @@ $ npm run cloudfront:setup
 
 Endpoint:  https://oyujdq1hui.execute-api.eu-west-1.amazonaws.com/dev
 
-### Testing the DB API is any available sandbox tool
+### Testing the DB API is any available sandbox tool. i.e. https://codepen.io
 
 ```javascript
 console.clear();
