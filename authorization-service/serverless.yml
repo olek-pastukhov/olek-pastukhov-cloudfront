@@ -9,12 +9,11 @@ provider:
   runtime: nodejs16.x
   region: eu-west-1
   profile: epamlearn
-  environment:
-    ${file(.env)}
+  environment: ${file(env.json)}
 
 plugins:
   - serverless-dotenv-plugin
 
 functions:
   basicAuthorizer:
-    handler: handler.basicAuthorizer
+    handler: basicAuthorizer.basicAuthorizer

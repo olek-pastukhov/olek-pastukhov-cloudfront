@@ -1,0 +1,21 @@
+{
+  "name": "olek-shop-auth-service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prettier": "prettier src --write",
+    "cloudfront:setup": "sls deploy",
+    "serverless:remove": "sls remove"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1599.0",
+    "prettier": "2.7.1",
+    "serverless": "^3.20.0",
+    "serverless-finch": "^4.0.0",
+    "serverless-s3-cleaner": "^2.0.1",
+    "serverless-dotenv-plugin": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
