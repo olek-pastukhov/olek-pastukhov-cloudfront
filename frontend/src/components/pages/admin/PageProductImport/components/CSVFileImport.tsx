@@ -29,14 +29,24 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
       return;
     }
 
+    const token = btoa(localStorage.getItem("authorization_token") || '');
+
     const response = await axios.get(url, {
+      headers: {
+        "Authorization": `Basic ${token}`
+      },
       params: {
         fileName: encodeURIComponent(file.name)
       }
     });
     console.log("File to upload: ", file.name);
     console.log("Uploading to: ", response.data);
-    const result = await axios.put(response.data, file, { headers: { "Content-Type": "text/csv" } });
+
+    const result = await axios.put(response.data, file, {
+      headers: {
+        "Content-Type": "text/csv"
+      }
+    });
     console.log("Result: ", result);
     setFile(undefined);
   };
