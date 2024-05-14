@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const csv = require("csv-parser");
+const sqs = new AWS.SQS();
 
 module.exports.importFileParser = async (event) => {
   console.log("importFileParser lambda has been invoked with event: ", event);
@@ -17,13 +18,13 @@ module.exports.importFileParser = async (event) => {
 
   await new Promise((resolve) => {
     s3Stream.pipe(csv())
-      .on("data", (data) => {
-        console.log(data);
+      .on("data", async (data) => {
+        await sqs.sendMessage({
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(data)
+        }).promise();
       })
-      .on("end", () => {
-        console.log("CSV processing completed");
-        resolve();
-      });
+      .on("end", resolve);
   });
 
   await s3.copyObject({

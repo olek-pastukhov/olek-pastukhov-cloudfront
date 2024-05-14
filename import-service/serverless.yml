@@ -1,23 +1,5 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
-
 service: import-service
-# app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
 frameworkVersion: "3"
 
 provider:
@@ -33,18 +15,54 @@ provider:
           Action:
             - s3:*
             - dynamodb:*
+            - sqs:*
+            - sns:*
           Resource:
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-products"
             - "arn:aws:dynamodb:eu-west-1:*:table/olek-stock"
             - "arn:aws:s3:::olek-import-service-s3/*"
+            - "arn:aws:sqs:eu-west-1:*:catalogItemsQueue"
+            - "arn:aws:sns:eu-west-1:*:createProductTopic"
 
   environment:
     PRODUCTS_DYNAMO_DB: 'olek-products'
     STOCK_DYNAMO_DB: 'olek-stock'
     UPLOADS_S3_BUCKET: 'olek-import-service-s3'
+    SNS_TOPIC_ARN: !Ref createProductTopic
+    SQS_URL: 'https://sqs.eu-west-1.amazonaws.com/471112819617/catalogItemsQueue'
+
 
 resources:
   Resources:
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    emailSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: oleksandr_pastukhov@epam.com
+        Protocol: email
+        FilterPolicy:
+          vip:
+            - 'false'
+        TopicArn:
+          Ref: createProductTopic
+    adminEmailSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: flashka.ua@gmail.com
+        Protocol: email
+        FilterPolicy:
+          vip:
+            - 'true'
+        TopicArn:
+          Ref: createProductTopic
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+
     UploadsBucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -60,6 +78,15 @@ resources:
                 - POST
 
 functions:
+  catalogBatchProcess:
+    handler: catalogBatchProcess.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
+          batchSize: 5
   importFileParser:
     handler: importFileParser.importFileParser
     events:
